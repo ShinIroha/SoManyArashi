@@ -8,23 +8,23 @@ public class Controller : MonoBehaviour
     Collider2D clickZone;
     GameObject scoreText;
     GameObject characterCountText;
-    GameObject clickCountText;
-    ObjectPool clickEffectPool;
+    GameObject cheerCountText;
+    ObjectPool cheerEffectPool;
     ObjectPool[] dotCharPool = new ObjectPool[5];
     static long score = 0;
     int characterCountTotal = 0;
     int[] characterCount = new int[5];  //aiba,jun,nino,ohno,sho
-    int clickCount = 0;
+    int cheerCount = 0;
 
-    int clickScore = 10;
+    int cheerScore = 10;
     // Use this for initialization
     void Start()
     {
         clickZone = GameObject.Find("Click Zone").GetComponent<Collider2D>();
         scoreText = GameObject.Find("Score");
         characterCountText = GameObject.Find("Character Count");
-        clickCountText = GameObject.Find("Click Count");
-        clickEffectPool = ObjectPool.GetObjectPool("prefabs/system/Click Effect");
+        cheerCountText = GameObject.Find("Cheer Count");
+        cheerEffectPool = ObjectPool.GetObjectPool("prefabs/system/Cheer Effect");
         dotCharPool[0] = ObjectPool.GetObjectPool("prefabs/characters/dot_aiba", 5, 5);
         dotCharPool[1] = ObjectPool.GetObjectPool("prefabs/characters/dot_jun", 5, 5);
         dotCharPool[2] = ObjectPool.GetObjectPool("prefabs/characters/dot_nino", 5, 5);
@@ -42,18 +42,12 @@ public class Controller : MonoBehaviour
 
             if (clickZone.OverlapPoint(clickPosition))
             {
-                clickEffectPool.New(new Vector3(clickPosition.x, clickPosition.y, clickPosition.z + 0.5f));
-                gainScore(clickScore);
-                clickCount++;
-                GenerateCharacter(0.1);
+                Cheer(new Vector3(clickPosition.x, clickPosition.y, clickPosition.z + 0.5f));
             }
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            clickEffectPool.New(new Vector3(0, 0, -9.5f));
-            gainScore(clickScore);
-            clickCount++;
-            GenerateCharacter(0.1);
+            Cheer(new Vector3(0, 0, -9.5f));
         }
 
         scoreText.GetComponent<Text>().text = score.ToString();
@@ -62,7 +56,15 @@ public class Controller : MonoBehaviour
             + "</color>+<color=orange>" + characterCount[2]
             + "</color>+<color=green>" + characterCount[0]
             + "</color>+<color=blue>" + characterCount[3] + "</color>)";
-        clickCountText.GetComponent<Text>().text = clickCount.ToString();
+        cheerCountText.GetComponent<Text>().text = cheerCount.ToString();
+    }
+
+    void Cheer(Vector3 position)
+    {
+        cheerEffectPool.New(position);
+        gainScore(cheerScore);
+        cheerCount++;
+        GenerateCharacter(0.1);
     }
 
     IEnumerator TryGenerate()
