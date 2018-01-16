@@ -1,0 +1,7 @@
+5.4.5p5:2.8.0.0
+StandaloneWindows64
+D:/EnglishDirectory/Unity5/Editor/Data/Managed/UnityEngine.dll
+D:/EnglishDirectory/Unity5/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll
+D:/EnglishDirectory/Unity5/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll
+D:/EnglishDirectory/Unity5/Editor/Data/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll
+D:/EnglishDirectory/Unity5/Editor/Data/Managed/UnityEditor.dll
