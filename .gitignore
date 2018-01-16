@@ -1,4 +1,5 @@
-project/SoManyArashi/Library
-project/SoManyArashi/Temp
-project/SoManyArashi/SoManyArashi.csproj
-project/SoManyArashi/.vs
+/project/SoManyArashi/Library
+/project/SoManyArashi/Temp
+/project/SoManyArashi/SoManyArashi.csproj
+/project/SoManyArashi/.vs
+/project/test_Data/output_log.txt
