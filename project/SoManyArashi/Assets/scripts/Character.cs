@@ -11,9 +11,9 @@ public class Character : MonoBehaviour
     void OnEnable()
     {
         initialY = transform.position.y;
-        if (rd==null)
+        if (rd == null)
             rd = GetComponent<Rigidbody2D>();
-        rd.velocity = new Vector2(-3, 0);
+        rd.velocity = new Vector2(Controller.rand.Next(200, 500) * -0.01f, 0);
         StartCoroutine(TryJump());
     }
 
@@ -27,7 +27,7 @@ public class Character : MonoBehaviour
         }
         if (isJumping)
         {
-            if (transform.position.y<initialY)
+            if (transform.position.y < initialY)
             {
                 rd.velocity = new Vector2(rd.velocity.x, 0);
                 transform.position = new Vector3(transform.position.x, initialY, transform.position.z);
