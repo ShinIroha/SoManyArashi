@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System;
 
 public class Controller : MonoBehaviour
 {
@@ -11,12 +12,12 @@ public class Controller : MonoBehaviour
     GameObject cheerCountText;
     ObjectPool cheerEffectPool;
     ObjectPool[] dotCharPool = new ObjectPool[5];
-    static long score = 0;
-    int characterCountTotal = 0;
-    int[] characterCount = new int[5];  //aiba,jun,nino,ohno,sho
-    int cheerCount = 0;
+    SaveData saveData=new SaveData();
 
+    //testing variables
     int cheerScore = 10;
+    int jumpScore = 50;
+    
     // Use this for initialization
     void Start()
     {
@@ -24,13 +25,19 @@ public class Controller : MonoBehaviour
         scoreText = GameObject.Find("Score");
         characterCountText = GameObject.Find("Character Count");
         cheerCountText = GameObject.Find("Cheer Count");
+        UIUpdateScore();
+        UIUpdateCharacterCount();
+        UIUpdateCheerCount();
+        //load object pools
         cheerEffectPool = ObjectPool.GetObjectPool("prefabs/system/Cheer Effect");
         dotCharPool[0] = ObjectPool.GetObjectPool("prefabs/characters/dot_aiba", 5, 5);
         dotCharPool[1] = ObjectPool.GetObjectPool("prefabs/characters/dot_jun", 5, 5);
         dotCharPool[2] = ObjectPool.GetObjectPool("prefabs/characters/dot_nino", 5, 5);
         dotCharPool[3] = ObjectPool.GetObjectPool("prefabs/characters/dot_ohno", 5, 5);
         dotCharPool[4] = ObjectPool.GetObjectPool("prefabs/characters/dot_sho", 5, 5);
+
         StartCoroutine(TryGenerate());
+        StartCoroutine(AutoSave());
     }
 
     // Update is called once per frame
@@ -50,20 +57,38 @@ public class Controller : MonoBehaviour
             Cheer(new Vector3(0, 0, -9.5f));
         }
 
-        scoreText.GetComponent<Text>().text = score.ToString();
-        characterCountText.GetComponent<Text>().text = characterCountTotal + "(<color=purple>" + characterCount[1]
-            + "</color>+<color=red>" + characterCount[4]
-            + "</color>+<color=orange>" + characterCount[2]
-            + "</color>+<color=green>" + characterCount[0]
-            + "</color>+<color=blue>" + characterCount[3] + "</color>)";
-        cheerCountText.GetComponent<Text>().text = cheerCount.ToString();
+    }
+
+    void OnDestroy()
+    {
+        saveData.Save();
+    }
+
+    void UIUpdateScore()
+    {
+        scoreText.GetComponent<Text>().text = saveData.score.ToString();
+    }
+
+    void UIUpdateCharacterCount()
+    {
+        characterCountText.GetComponent<Text>().text = saveData.characterCountTotal + "(<color=purple>" + saveData.characterCount[1]
+        + "</color>+<color=red>" + saveData.characterCount[4]
+        + "</color>+<color=orange>" + saveData.characterCount[2]
+        + "</color>+<color=green>" + saveData.characterCount[0]
+        + "</color>+<color=blue>" + saveData.characterCount[3] + "</color>)";
+    }
+
+    void UIUpdateCheerCount()
+    {
+        cheerCountText.GetComponent<Text>().text = saveData.cheerCount.ToString();
     }
 
     void Cheer(Vector3 position)
     {
         cheerEffectPool.New(position);
         gainScore(cheerScore);
-        cheerCount++;
+        saveData.cheerCount++;
+        UIUpdateCheerCount();
         GenerateCharacter(0.1);
     }
 
@@ -83,14 +108,30 @@ public class Controller : MonoBehaviour
             float y = rand.Next(67, 301) * -0.01f;
             int character = rand.Next(5);
             dotCharPool[character].New(new Vector3(4, y, y + 3));
-            characterCount[character]++;
             gainScore(100);
-            characterCountTotal++;
+            saveData.characterCount[character]++;
+            saveData.characterCountTotal++;
+            UIUpdateCharacterCount();
         }
     }
 
-    public static void gainScore(int score)
+    public void gainScore(int score)
     {
-        Controller.score += score;
+        saveData.score += score;
+        UIUpdateScore();
+    }
+
+    public void OnCharacterJump()
+    {
+        gainScore(jumpScore);
+    }
+
+    IEnumerator AutoSave()
+    {
+        while (true)
+        {
+            saveData.Save();
+            yield return new WaitForSeconds(Constants.AUTO_SAVE_PERIOD);
+        }
     }
 }

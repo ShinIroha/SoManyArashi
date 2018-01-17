@@ -7,12 +7,17 @@ public class Character : MonoBehaviour
     bool isJumping = false;
     float initialY;
     Rigidbody2D rd;
+    Controller controller;
     // Use this for initialization
     void OnEnable()
     {
         initialY = transform.position.y;
         if (rd == null)
             rd = GetComponent<Rigidbody2D>();
+        if (controller == null)
+        {
+            controller = GameObject.Find("Controller").GetComponent<Controller>();
+        }
         rd.velocity = new Vector2(Controller.rand.Next(200, 500) * -0.01f, 0);
         StartCoroutine(TryJump());
     }
@@ -54,6 +59,6 @@ public class Character : MonoBehaviour
     {
         rd.velocity = new Vector2(rd.velocity.x, 10);
         isJumping = true;
-        Controller.gainScore(50);
+        controller.OnCharacterJump();
     }
 }
