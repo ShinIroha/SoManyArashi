@@ -12,7 +12,7 @@ public class Controller : MonoBehaviour
     GameObject cheerCountText;
     ObjectPool cheerEffectPool;
     ObjectPool[] dotCharPool = new ObjectPool[5];
-    SaveData saveData=new SaveData();
+    SaveDataController sav;
 
     //testing variables
     int cheerScore = 10;
@@ -21,6 +21,7 @@ public class Controller : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        sav = new SaveDataController();
         clickZone = GameObject.Find("Click Zone").GetComponent<Collider2D>();
         scoreText = GameObject.Find("Score");
         characterCountText = GameObject.Find("Character Count");
@@ -59,35 +60,35 @@ public class Controller : MonoBehaviour
 
     }
 
-    void OnDestroy()
+    private void OnDestroy()
     {
-        saveData.Save();
+        sav.Save();
     }
 
     void UIUpdateScore()
     {
-        scoreText.GetComponent<Text>().text = saveData.score.ToString();
+        scoreText.GetComponent<Text>().text = sav.saveData.score.ToString();
     }
 
     void UIUpdateCharacterCount()
     {
-        characterCountText.GetComponent<Text>().text = saveData.characterCountTotal + "(<color=purple>" + saveData.characterCount[1]
-        + "</color>+<color=red>" + saveData.characterCount[4]
-        + "</color>+<color=orange>" + saveData.characterCount[2]
-        + "</color>+<color=green>" + saveData.characterCount[0]
-        + "</color>+<color=blue>" + saveData.characterCount[3] + "</color>)";
+        characterCountText.GetComponent<Text>().text = sav.saveData.characterCountTotal + "(<color=purple>" + sav.saveData.characterCount[1]
+        + "</color>+<color=red>" + sav.saveData.characterCount[4]
+        + "</color>+<color=orange>" + sav.saveData.characterCount[2]
+        + "</color>+<color=green>" + sav.saveData.characterCount[0]
+        + "</color>+<color=blue>" + sav.saveData.characterCount[3] + "</color>)";
     }
 
     void UIUpdateCheerCount()
     {
-        cheerCountText.GetComponent<Text>().text = saveData.cheerCount.ToString();
+        cheerCountText.GetComponent<Text>().text = sav.saveData.cheerCount.ToString();
     }
 
     void Cheer(Vector3 position)
     {
         cheerEffectPool.New(position);
         gainScore(cheerScore);
-        saveData.cheerCount++;
+        sav.saveData.cheerCount++;
         UIUpdateCheerCount();
         GenerateCharacter(0.1);
     }
@@ -109,15 +110,15 @@ public class Controller : MonoBehaviour
             int character = rand.Next(5);
             dotCharPool[character].New(new Vector3(4, y, y + 3));
             gainScore(100);
-            saveData.characterCount[character]++;
-            saveData.characterCountTotal++;
+            sav.saveData.characterCount[character]++;
+            sav.saveData.characterCountTotal++;
             UIUpdateCharacterCount();
         }
     }
 
     public void gainScore(int score)
     {
-        saveData.score += score;
+        sav.saveData.score += score;
         UIUpdateScore();
     }
 
@@ -130,8 +131,8 @@ public class Controller : MonoBehaviour
     {
         while (true)
         {
-            saveData.Save();
             yield return new WaitForSeconds(Constants.AUTO_SAVE_PERIOD);
+            sav.Save();
         }
     }
 }
