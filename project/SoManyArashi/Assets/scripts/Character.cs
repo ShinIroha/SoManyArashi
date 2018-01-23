@@ -49,7 +49,7 @@ public class Character : MonoBehaviour
     {
         while (true)
         {
-            if (!isJumping && Controller.rand.NextDouble() < 0.03)
+            if (!isJumping && Controller.rand.NextDouble() < 0.02)
                 Jump();
             yield return new WaitForSeconds(0.1f);
         }

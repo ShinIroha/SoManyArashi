@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <SaveData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <score>1300</score>
-  <characterCountTotal>11</characterCountTotal>
+  <score>90390</score>
+  <characterCountTotal>690</characterCountTotal>
   <characterCount>
-    <int>2</int>
-    <int>3</int>
-    <int>2</int>
-    <int>3</int>
-    <int>1</int>
+    <int>133</int>
+    <int>143</int>
+    <int>140</int>
+    <int>134</int>
+    <int>140</int>
   </characterCount>
-  <cheerCount>0</cheerCount>
+  <cheerCount>429</cheerCount>
 </SaveData>
