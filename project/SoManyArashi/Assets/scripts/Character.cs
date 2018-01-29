@@ -4,6 +4,10 @@ using System.Collections;
 
 public class Character : MonoBehaviour
 {
+    public int series;
+    public int character;
+    public int level;
+
     bool isJumping = false;
     float initialY;
     Rigidbody2D rd;
@@ -20,6 +24,11 @@ public class Character : MonoBehaviour
         }
         rd.velocity = new Vector2(Controller.rand.Next(200, 500) * -0.01f, 0);
         StartCoroutine(TryJump());
+    }
+
+    private void OnDisable()
+    {
+        StopAllCoroutines();
     }
 
     // Update is called once per frame
@@ -49,7 +58,7 @@ public class Character : MonoBehaviour
     {
         while (true)
         {
-            if (!isJumping && Controller.rand.NextDouble() < 0.02)
+            if (!isJumping && Controller.rand.NextDouble() < CharacterSeriesDatabase.data[series].jumpRate[level]) 
                 Jump();
             yield return new WaitForSeconds(0.1f);
         }
@@ -59,6 +68,6 @@ public class Character : MonoBehaviour
     {
         rd.velocity = new Vector2(rd.velocity.x, 10);
         isJumping = true;
-        controller.OnCharacterJump();
+        controller.OnCharacterJump(series,character);
     }
 }

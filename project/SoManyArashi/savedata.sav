@@ -1,13 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <SaveData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <score>90390</score>
-  <characterCountTotal>690</characterCountTotal>
+  <score>993</score>
+  <totalScore>2493</totalScore>
+  <characterCountTotal>23</characterCountTotal>
   <characterCount>
-    <int>133</int>
-    <int>143</int>
-    <int>140</int>
-    <int>134</int>
-    <int>140</int>
+    <int>6</int>
+    <int>6</int>
+    <int>7</int>
+    <int>2</int>
+    <int>2</int>
   </characterCount>
-  <cheerCount>429</cheerCount>
+  <cheerCount>173</cheerCount>
+  <characterLevel>
+    <ArrayOfInt>
+      <int>1</int>
+      <int>1</int>
+      <int>2</int>
+      <int>1</int>
+      <int>1</int>
+    </ArrayOfInt>
+  </characterLevel>
 </SaveData>

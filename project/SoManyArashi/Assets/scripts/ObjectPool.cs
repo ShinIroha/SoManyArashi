@@ -42,30 +42,34 @@ class ObjectPool
 
     public GameObject New()
     {
+        GameObject obj;
         if (objects.Count == 0)
         {
             for (int i = 0; i < step; i++)
             {
-                objects.Push(GameObject.Instantiate(prefab));
+                obj = GameObject.Instantiate(prefab);
+                obj.GetComponent<ObjectPoolRestorer>().sourcePool = this;
+                objects.Push(obj);
             }
         }
-        GameObject obj = objects.Pop();
-        obj.SetActive(true);
+        obj = objects.Pop();
         return obj;
     }
 
     public GameObject New(Vector3 position)
     {
+        GameObject obj;
         if (objects.Count == 0)
         {
             for (int i = 0; i < step; i++)
             {
-                objects.Push(GameObject.Instantiate(prefab));
+                obj = GameObject.Instantiate(prefab);
+                obj.GetComponent<ObjectPoolRestorer>().sourcePool = this;
+                objects.Push(obj);
             }
         }
-        GameObject obj= objects.Pop();
+        obj = objects.Pop();
         obj.transform.position = position;
-        obj.SetActive(true);
         return obj;
     }
 
@@ -84,7 +88,6 @@ class ObjectPool
         obj = objects.Pop();
         obj.transform.position = position;
         obj.transform.rotation = rotation;
-        obj.SetActive(true);
         return obj;
     }
 

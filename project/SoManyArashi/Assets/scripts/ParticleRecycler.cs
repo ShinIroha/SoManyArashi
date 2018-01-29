@@ -20,7 +20,8 @@ class ParticleRecycler : MonoBehaviour
             if (GetComponent<ObjectPoolRestorer>() != null)
             {
                 gameObject.SetActive(false);
-            }else
+            }
+            else
             {
                 Destroy(gameObject);
             }
