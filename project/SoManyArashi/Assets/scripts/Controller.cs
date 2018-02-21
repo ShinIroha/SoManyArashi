@@ -84,7 +84,7 @@ public class Controller : MonoBehaviour
 
     void UIUpdateScore()
     {
-        scoreText.text = sav.saveData.score.ToString()+"/"+ sav.saveData.totalScore.ToString();
+        scoreText.text = sav.saveData.score.ToString() + "/" + sav.saveData.totalScore.ToString();
     }
 
     void UIUpdateCharacterCount()
@@ -109,14 +109,17 @@ public class Controller : MonoBehaviour
             {
                 int level = sav.saveData.characterLevel[series][character];
                 characterLevelText[series, character].text = level.ToString();
-                characterCostText[series, character].text = CharacterSeriesDatabase.data[series].cost[level + 1].ToString();
+                if (level >= CharacterSeriesDatabase.data[series].maxLevel)
+                    characterCostText[series, character].text = "max";
+                else
+                    characterCostText[series, character].text = CharacterSeriesDatabase.data[series].cost[level].ToString();
             }
         }
     }
 
     void Cheer(Vector3 position)
     {
-        GameObject obj=cheerEffectPool.New(position);
+        GameObject obj = cheerEffectPool.New(position);
         obj.SetActive(true);
         gainScore(cheerScore);
         sav.saveData.cheerCount++;
@@ -192,7 +195,9 @@ public class Controller : MonoBehaviour
         int series = seriesAndCharacter / 10;
         int character = seriesAndCharacter % 10;
         int level = sav.saveData.characterLevel[series][character];
-        int cost = CharacterSeriesDatabase.data[series].cost[level + 1];
+        if (level >= CharacterSeriesDatabase.data[series].maxLevel)
+            return;
+        int cost = CharacterSeriesDatabase.data[series].cost[level];
         if (cost <= sav.saveData.score)
         {
             sav.saveData.score -= cost;
