@@ -22,20 +22,14 @@ public class Controller : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        //load character level buttons
+        LoadCharacterLevelButtons();
+
         //find UI components
         clickZone = GameObject.Find("Click Zone").GetComponent<Collider2D>();
         scoreText = GameObject.Find("Score").GetComponent<Text>();
         characterCountText = GameObject.Find("Character Count").GetComponent<Text>();
         cheerCountText = GameObject.Find("Cheer Count").GetComponent<Text>();
-        for (int series = 0; series < Constants.CHARACTER_SERIES_COUNT; series++)
-        {
-            for (int character = 0; character < 5; character++)
-            {
-                string name = CharacterSeriesDatabase.data[series].name + " " + Constants.ALPHABET_NAMES[character];
-                characterLevelText[series, character] = GameObject.Find(name + " Level").GetComponent<Text>();
-                characterCostText[series, character] = GameObject.Find(name + " Cost").GetComponent<Text>();
-            }
-        }
 
         //load savedata
         sav = new SaveDataController();
@@ -82,6 +76,49 @@ public class Controller : MonoBehaviour
         sav.Save();
     }
 
+    void LoadCharacterLevelButtons()
+    {
+        GameObject prefab = Resources.Load<GameObject>("prefabs/system/Character Level Button");
+        int[] shift = new int[5] { 1, 4, 2, 0, 3 };   //change color(UI) order into alphabet order
+        string seriesName;
+        Sprite[] backgroud = new Sprite[5];
+        for (int series = 0; series < Constants.CHARACTER_SERIES_COUNT; series++)
+        {
+            seriesName = CharacterSeriesDatabase.data[series].name;
+            for (int character = 0; character < 5; character++)
+            {
+                //load background image if necessary
+                if (backgroud[character] == null)
+                {
+                    backgroud[character] = Resources.Load<Sprite>("images/system/char_lvl_bg_" + Constants.ALPHABET_NAMES_LOWERCASE[shift[character]]);
+                }
+                //instantiate object
+                GameObject obj = Instantiate<GameObject>(prefab, GameObject.Find("Level Content").transform);
+                obj.transform.localPosition = new Vector3(-265 + 110 * character, -25 - 140 * series, 0);
+                //modify object name
+                obj.name = seriesName + " " + Constants.ALPHABET_NAMES[shift[character]];
+                //modify background image
+                obj.GetComponent<Image>().sprite = backgroud[character];
+                //modify character image
+                Transform image = obj.transform.Find("Image");
+                image.GetComponent<Image>().sprite = Resources.Load<Sprite>("images/characters/" + seriesName.ToLower() + "_" + Constants.ALPHABET_NAMES_LOWERCASE[shift[character]]);
+                //modify button click event
+                Button button = obj.GetComponentInChildren<Button>();
+                int tc = character; //temp variables
+                int ts = series;
+                button.onClick.AddListener(()=> { OnCharacterLevelButtonClick(ts,shift[tc]); });
+                //modify level text
+                Transform levelText = obj.transform.Find("Level").Find("Level Text");
+                levelText.name = obj.name + " Level";
+                characterLevelText[series, shift[character]] = levelText.GetComponent<Text>();
+                //modify cost text
+                Transform costText = obj.transform.Find("Cost").Find("Cost Text");
+                costText.name = obj.name + " Cost";
+                characterCostText[series, shift[character]] = costText.GetComponent<Text>();
+            }
+        }
+    }
+
     void UIUpdateScore()
     {
         scoreText.text = sav.saveData.score.ToString() + "/" + sav.saveData.totalScore.ToString();
@@ -107,14 +144,19 @@ public class Controller : MonoBehaviour
         {
             for (int character = 0; character < 5; character++)
             {
-                int level = sav.saveData.characterLevel[series][character];
-                characterLevelText[series, character].text = level.ToString();
-                if (level >= CharacterSeriesDatabase.data[series].maxLevel)
-                    characterCostText[series, character].text = "max";
-                else
-                    characterCostText[series, character].text = CharacterSeriesDatabase.data[series].cost[level].ToString();
+                UIUpdateCharacterPanel(series, character);
             }
         }
+    }
+
+    void UIUpdateCharacterPanel(int series, int character)
+    {
+        int level = sav.saveData.characterLevel[series][character];
+        characterLevelText[series, character].text = level.ToString();
+        if (level >= CharacterSeriesDatabase.data[series].maxLevel)
+            characterCostText[series, character].text = "max";
+        else
+            characterCostText[series, character].text = CharacterSeriesDatabase.data[series].cost[level].ToString();
     }
 
     void Cheer(Vector3 position)
@@ -190,10 +232,8 @@ public class Controller : MonoBehaviour
         gainScore(0);
     }
 
-    public void OnCharacterLevelButtonClick(int seriesAndCharacter)
+    public void OnCharacterLevelButtonClick(int series,int character)
     {
-        int series = seriesAndCharacter / 10;
-        int character = seriesAndCharacter % 10;
         int level = sav.saveData.characterLevel[series][character];
         if (level >= CharacterSeriesDatabase.data[series].maxLevel)
             return;
@@ -214,5 +254,10 @@ public class Controller : MonoBehaviour
             yield return new WaitForSeconds(Constants.AUTO_SAVE_PERIOD);
             sav.Save();
         }
+    }
+
+    void DummyFunction()
+    {
+        Debug.Log("dummy");
     }
 }

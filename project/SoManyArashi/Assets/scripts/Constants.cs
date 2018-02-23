@@ -16,5 +16,5 @@ public static class Constants
     public const float AUTO_SAVE_PERIOD = 60;
     public static readonly string[] ALPHABET_NAMES = new string[5] { "Aiba", "Jun", "Nino", "Ohno", "Sho" };
     public static readonly string[] ALPHABET_NAMES_LOWERCASE = new string[5] { "aiba", "jun", "nino", "ohno", "sho" };
-    public const int CHARACTER_SERIES_COUNT = 1;
+    public const int CHARACTER_SERIES_COUNT = 2;
 }

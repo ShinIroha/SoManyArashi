@@ -47,6 +47,10 @@ public class SaveDataController
             */
             fileStream = new FileStream(Constants.SAVE_PATH, FileMode.Open);
             saveData = serializer.Deserialize(fileStream) as SaveData;
+            if (AdaptSavedata())
+            {
+                Save();
+            }
         }
         catch (Exception e)
         {
@@ -112,5 +116,32 @@ public class SaveDataController
     {
         fileStream.Close();
         fileStream.Dispose();
+    }
+
+    bool AdaptSavedata()
+    {
+        bool isModified = false;
+        //increase character series
+        if (Constants.CHARACTER_SERIES_COUNT != saveData.characterLevel.Length)
+        {
+            int[][] temp = new int[Constants.CHARACTER_SERIES_COUNT][];
+            for(int i = 0; i < Constants.CHARACTER_SERIES_COUNT; i++)
+            {
+                //copy old data
+                if (i < saveData.characterLevel.Length)
+                {
+                    temp[i] = saveData.characterLevel[i];
+                }
+                //initialize new data
+                else
+                {
+                    temp[i] = new int[5] { 0, 0, 0, 0, 0 };
+                }
+            }
+            saveData.characterLevel = temp;
+            isModified = true;
+        }
+
+        return isModified;
     }
 }

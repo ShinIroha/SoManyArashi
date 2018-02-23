@@ -18,12 +18,12 @@ public class MenuButton : MonoBehaviour
         menu = GameObject.Find("Menu");
         clickZone = GameObject.Find("Click Zone");
         button = GetComponent<Button>();
-        spriteOpen = Resources.Load<Sprite>("images/btn_menu_open");
-        spriteClose = Resources.Load<Sprite>("images/btn_menu_close");
-        ssOpen.highlightedSprite = Resources.Load<Sprite>("images/btn_menu_open_over");
-        ssOpen.pressedSprite = Resources.Load<Sprite>("images/btn_menu_open_pressed");
-        ssClose.highlightedSprite = Resources.Load<Sprite>("images/btn_menu_close_over");
-        ssClose.pressedSprite = Resources.Load<Sprite>("images/btn_menu_close_pressed");
+        spriteOpen = Resources.Load<Sprite>("images/system/btn_menu_open");
+        spriteClose = Resources.Load<Sprite>("images/system/btn_menu_close");
+        ssOpen.highlightedSprite = Resources.Load<Sprite>("images/system/btn_menu_open_over");
+        ssOpen.pressedSprite = Resources.Load<Sprite>("images/system/btn_menu_open_pressed");
+        ssClose.highlightedSprite = Resources.Load<Sprite>("images/system/btn_menu_close_over");
+        ssClose.pressedSprite = Resources.Load<Sprite>("images/system/btn_menu_close_pressed");
     }
 
     // Update is called once per frame
